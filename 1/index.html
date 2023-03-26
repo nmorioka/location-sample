@@ -38,6 +38,7 @@
             // 地図インスタンスへレイヤーを追加
             map.addLayer(backgroundLayer);
 
+            <!--
             // ピン定義
             const marker = L.marker([33, 129.5]); // ピン＝Markerを初期化
             marker.bindPopup('平面直角座標1系原点'); // ポップアップを紐付け
@@ -67,6 +68,21 @@
             map.attributionControl.addAttribution(
                 '<a href="https://www.gsi.go.jp/LAW/heimencho.html">平面直角座標系（平成十四年国土交通省告示第九号）</a>',
             );
+            -->
+
+            map.attributionControl.addAttribution(
+                '<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P29-v2_0.html">国土数値情報 - 学校データ</a>',
+            );
+
+            // GeoJSONレイヤーを作成
+            fetch('./P29-21_10.geojson') // 群馬県の学校データのGeoJSONを非同期読み込み
+                .then((res) => res.json())
+                .then((json) => {
+                    // GeoJSONレイヤーを作成
+                    L.geoJSON(json)
+                        .bindPopup((layer) => layer.feature.properties.P29_004) // ポップアップで学校名を表示
+                        .addTo(map);
+                });
         </script>
     </body>
 </html>
