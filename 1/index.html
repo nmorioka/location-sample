@@ -34,17 +34,39 @@
                 center: [36.5, 137.1], // 初期表示の地図中心の[緯度, 経度]
                 zoom: 5, // 初期ズームレベル
             });
-            // 背景レイヤーインスタンスを初期化
-            const backgroundLayer = L.tileLayer(
-                'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMのURLテンプレート
-                {
-                    maxZoom: 19,
-                    attribution:
-                        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                },
-            );
-            // 地図インスタンスへレイヤーを追加
-            map.addLayer(backgroundLayer);
+                  // 背景地図データ
+            const baseLayers = {
+                OpenStreetMap: L.tileLayer(
+                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                        maxZoom: 19,
+                        attribution:
+                            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    },
+                ),
+                地理院地図: L.tileLayer(
+                    'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
+                    {
+                        maxZoom: 18,
+                        attribution:
+                            '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>',
+                    },
+                ),
+                空中写真: L.tileLayer(
+                    'https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',
+                    {
+                        maxZoom: 17,
+                        attribution:
+                            '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>',
+                    },
+                ),
+            };
+            map.addLayer(baseLayers['OpenStreetMap']); // OSMを初期表示
+
+            // レイヤー切り替えコントロール
+            const layersControl = L.control
+                .layers(baseLayers, [], { collapsed: false })
+                .addTo(map);
 
             map.attributionControl.addAttribution(
                 '<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P29-v2_0.html">国土数値情報 - 学校データ</a>',
